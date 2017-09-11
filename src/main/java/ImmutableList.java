@@ -7,7 +7,10 @@ import java.util.*;
  * Author: Linus Lagerhjelm
  * File: ImmutableList
  * Created: 2017-09-08
- * Description:
+ * Description: Represents an immutable list. That is, a list which can not be
+ * modified. All operations on this list will return a copy of the source list
+ * rather than modifying it. It does also performs a deep copy on all the
+ * elements that are inserted and retrieved from the array.
  */
 @SuppressWarnings("unused")
 public class ImmutableList<T> extends AbstractList<T> implements List<T> {
@@ -23,6 +26,12 @@ public class ImmutableList<T> extends AbstractList<T> implements List<T> {
         mValues = Collections.unmodifiableList(mCloner.deepClone(Arrays.asList(items)));
     }
 
+    /**
+     * Returns a new {@link ImmutableList} from the specified items.
+     * @param items The items to create the list from
+     * @return An Immutable list instance
+     */
+    @SafeVarargs
     public static <E> ImmutableList<E> of(E... items) {
         return new ImmutableList<>(items);
     }
@@ -63,6 +72,13 @@ public class ImmutableList<T> extends AbstractList<T> implements List<T> {
                 "implemented. Please use sorted() instead");
     }
 
+    /**
+     * Non mutating sorting method of this list. Works like the regular
+     * list sort method but returns a sorted copy rather than doing in-place
+     * sorting.
+     * @param c the compare function to use during sort
+     * @return Sorted copy of this ImmutableList
+     */
     @SuppressWarnings("unchecked")
     public ImmutableList<T> sorted(Comparator<? super T> c) {
         T[] tmp = (T[])mCloner.deepClone(mValues).toArray();
